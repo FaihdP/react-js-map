@@ -3,8 +3,8 @@ import { createContext, useState } from "react";
 export const Context = createContext()
 
 export function ContextProvider({ children }) {
-  const [from, setFrom] = useState([])
-  const [to, setTo] = useState([])
+  const [from, setFrom] = useState(null)
+  const [to, setTo] = useState(null)
 
   return (
     <Context.Provider

@@ -3,19 +3,21 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import 'leaflet/dist/leaflet.css'
 import LocationUser from "./LocationUser";
 import { useParams } from "react-router-dom";
-import Routing from "./Routing";
+import { useContext } from "react";
+import { Context } from "../context/Context";
+import { useEffect } from "react";
 
 function Map({ children }) {
   
-  const {latitude, longitude} = useParams()
+  if (!("geolocation" in navigator)) return <div>No se puede mostrar la localizacion ya que tu navegador no soporta esta opcion</div>
 
-  if (!("geolocation" in navigator)) {
-    return <div>No se puede mostrar la localizacion ya que tu navegador no soporta esta opcion</div>
-  }
-
-  // if (from === null || to === null) return <div>Error</div>
-
-  console.log(latitude, longitude)
+  const { to, setTo } = useContext(Context)
+  const { latitude, longitude } = useParams()
+  
+  useEffect(() => {
+    if (latitude && longitude) setTo(L.latLng(latitude, longitude))
+    console.log(to)
+  }, [])
 
   return (
     <>
@@ -31,7 +33,7 @@ function Map({ children }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <LocationUser />
-        <Routing/>
+        { children }
       </MapContainer>
     </>
   );
