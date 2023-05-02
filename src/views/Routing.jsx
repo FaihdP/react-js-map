@@ -1,24 +1,30 @@
 import L from "leaflet";
-import { createControlComponent } from "@react-leaflet/core";
 import "leaflet-routing-machine";
 import { useContext } from "react";
+import { useMap } from "react-leaflet";
 import { Context } from "../context/Context";
 
-const control = () => {
+const Routing = () => {
   const { from, to } = useContext(Context)
-  console.log(from)
-  console.log(to)
-  const instance = L.Routing.control({
+  const map = useMap();
+
+  L.Routing.control({
     waypoints: [
-      from,
-      to
+      L.latLng(from[0], from[1]),
+      L.latLng(to[0], to[1])
     ],
-    show: false
-  });
+    lineOptions: {
+      styles: [{ color: "#6FA1EC", weight: 4 }]
+    },
+    show: false,
+    addWaypoints: false,
+    routeWhileDragging: true,
+    draggableWaypoints: true,
+    fitSelectedRoutes: true,
+    showAlternatives: false
+  }).addTo(map)
 
-  return instance;
+  return null
 };
-
-const Routing = createControlComponent(control);
 
 export default Routing;

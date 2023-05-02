@@ -1,23 +1,35 @@
-import Header from "./Header";
-import { MapContainer, TileLayer } from "react-leaflet";
-import 'leaflet/dist/leaflet.css'
-import LocationUser from "./LocationUser";
-import { useParams } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Context } from "../context/Context";
-import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { MapContainer, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import Header from "./Header";
+import LocationUser from "./LocationUser";
+import Routing from "./Routing";
+import ShareButton from "./ShareButton";
 
-function Map({ children }) {
-  
-  if (!("geolocation" in navigator)) return <div>No se puede mostrar la localizacion ya que tu navegador no soporta esta opcion</div>
+function Map() {
+  const { from, to, setTo } = useContext(Context);
+  let { latitude, longitude } = useParams();
+  if (latitude && longitude) {
+    latitude = parseFloat(latitude.replace("]", "."));
+    longitude = parseFloat(longitude.replace("]", "."));
+  }
 
-  const { to, setTo } = useContext(Context)
-  const { latitude, longitude } = useParams()
-  
   useEffect(() => {
-    if (latitude && longitude) setTo(L.latLng(latitude, longitude))
-    console.log(to)
-  }, [])
+    if (latitude && longitude) {
+      setTo([latitude, longitude])
+      alert("Para llevarte a la ubicación, debes ubicarte en el mapa, ¡Has doble click encima de él!")
+    }
+  }, [latitude, longitude, setTo]);
+
+  if (!("geolocation" in navigator))
+    return (
+      <div>
+        No se puede mostrar la localizacion ya que tu navegador no soporta esta
+        opcion
+      </div>
+    );
 
   return (
     <>
@@ -33,8 +45,9 @@ function Map({ children }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <LocationUser />
-        { children }
+        {latitude && longitude ? <Routing from={from} to={to} /> : null}
       </MapContainer>
+      <ShareButton />
     </>
   );
 }

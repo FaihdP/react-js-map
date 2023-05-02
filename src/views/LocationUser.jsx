@@ -1,19 +1,17 @@
 import { useContext, useState } from "react"
 import { Marker, Popup, useMapEvents } from "react-leaflet"
-import L from "leaflet"
 import { Context } from "../context/Context"
 
 function LocationUser() {  
-  const [position, setPosition] = useState(L.latLng(0, 0))
+  const [position, setPosition] = useState(null);
   const { setFrom } = useContext(Context)
-
   const map = useMapEvents({
     dblclick() {
       map.locate()
     },
     locationfound({latlng}) {
-      setFrom(latlng)
       setPosition(latlng)
+      setFrom([latlng.lat, latlng.lng])
       map.flyTo(latlng, 13)
     },
   })

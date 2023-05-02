@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
     element: 
       <App>
         <Map>
-          <Routing/>
+          <Routing />
         </Map>
       </App>
     ,

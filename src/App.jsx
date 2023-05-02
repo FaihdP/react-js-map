@@ -1,10 +1,7 @@
-import { useContext, useEffect, useState } from 'react'
-import { Context } from './context/Context';
+import { useEffect, useState } from 'react'
 
 function App({children}) {
   const [isLoading, setIsLoading] = useState(true);
-
-  const {setFrom} = useContext(Context)
 
   useEffect(() => {
     setIsLoading(false);
@@ -41,5 +38,7 @@ function App({children}) {
     </div>
   )
 }
+
+App.propTypes;
 
 export default App
